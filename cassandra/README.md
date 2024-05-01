@@ -2,9 +2,11 @@
 
 Ce TP vous servira d'introduction à la base de donnée orientée colonne en utilisant un DMBS Cassandra.
 Ceci fait l'objet d'un TP noté, vous avez jusqu'à la ~~prochaine alternance~~ trois semaines à partir de la mise à jour 
-du présent sujet (Pas encore à jour) pour le finaliser.
+du présent sujet pour le finaliser.
 
-Rendu attendu sur myges :
+Le sujet est maintenant dans sa phase quasi-définitif, n'hésitez pas à faire des retours pour le perfectionner.
+
+Rendu attendu sur MyGES :
 -  Rapport d'activité du TP, retraçant l'ensemble de vos travaux
    - Pour information : Le rapport contiendra essentiellement les captures d'écrans des résultats d'executions de vos 
    requêtes. 
