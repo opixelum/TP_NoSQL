@@ -1,17 +1,17 @@
 networks:
   cassandra:
+
 services:
   cassandra-1:
     image: cassandra:latest
     container_name: cassandra1
     ports:
       - "9042:9042"  # Cassandra client port
-      - "7000:7000"  # Cassandra inter-node communication
-      - "7001:7001"  # Cassandra SSL inter-node communication
+      - "7004:7000"  # Cassandra SSL inter-node communication
+      - "7005:7001"  # Cassandra JMX monitoring port
       - "7199:7199"  # Cassandra JMX monitoring port
       - "9160:9160"  # Cassandra Thrift client API
     environment: &environment
-
       CASSANDRA_SEEDS: "cassandra1,cassandra2"
       CASSANDRA_CLUSTER_NAME: ESGICluster
       CASSANDRA_DC: DC1
@@ -30,13 +30,14 @@ services:
       start_period: 2m
       timeout: 10s
       retries: 3
+
   cassandra-2:
     image: cassandra:latest
     container_name: cassandra2
     ports:
       - "9043:9042"  # Cassandra client port
-      - "7002:7000"  # Cassandra inter-node communication
-      - "7003:7001"  # Cassandra SSL inter-node communication
+      - "7006:7000"  # Cassandra inter-node communication
+      - "7007:7001"  # Cassandra SSL inter-node communication
       - "7198:7199"  # Cassandra JMX monitoring port
       - "9161:9160"  # Cassandra Thrift client API
     volumes:
