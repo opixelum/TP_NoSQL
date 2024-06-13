@@ -7,14 +7,10 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGODB_INITDB_ROOT_USERNAME: root
+      MONGODB_INITDB_ROOT_PASSWORD: example
     volumes:
-      - ./mongodv_data_container:/data/db
-      - ./mongoconfig:/data/configdb
       - ./sample_data:/sample_data
     
 volumes:
-  mongodv_data_container:
-  mongoconfig:
   sample_data:
