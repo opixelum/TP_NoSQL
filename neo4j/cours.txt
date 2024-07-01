@@ -1,0 +1,128 @@
+1. CREATE (jim:Person {name: 'Jim', age: 47})
+2. MATCH (n:Person) WHERE n.name='Jim' RETURN n
+3. MATCH (n:Person {name: 'Jim'}) DETACH DELETE n
+4. MATCH (n:Person) WHERE n.name='Jim' RETURN n
+
+5. MATCH (n)
+   WHERE NOT (EXISTS(n.emploi))
+   SET n.emploi=n.job
+   REMOVE n.job
+   RETURN properties(n)
+6. MATCH(n) REMOVE n.emploi RETURN properties(n)
+
+7. MATCH(n) RETURN n
+
+8.  MATCH (jim:Person {name: 'Jim'}) 
+CREATE (sally:Person:Employee {name: 'Sally', age: 28}),
+(john:Person:Employee {name: 'John', age: 30}),
+(proj:Project {title: 'Graph Databases', town: 'Paris'}),
+(dept:Department {name: '4FUTURE'}),
+(jim)-[:MANAGER {since:'01/09/2015'}]->(sally),
+(jim)-[:WORKS_WITH {since:'01/09/2015'}]->(sally),
+(sally)-[:WORKS_WITH {since:'02/05/2014'}]->(john),
+(jim)-[:COORDINATES {since:'02/03/2015'}]->(proj),
+(sally)-[:PARTICIPATES {since:'02/03/2015'}]->(proj),
+(sally)-[:BELONGS_TO]->(dept),
+(john)-[:BELONGS_TO]->(dept)
+
+9. MATCH (n) RETURN n
+
+10. MATCH(n) --> () RETURN n
+
+11. MATCH (john {name:"John"}) – [r ] - ()
+RETURN TYPE(r) 
+
+12. MATCH (e: Employee) --> (d: Department)
+    RETURN e.name, d.name
+13. MATCH (jim:Person {name: 'Jim'}) - [:MANAGER]->(sub)
+   RETURN jim, sub
+14. 
+   MATCH (sally:Employee { name: 'Sally' })
+   MATCH (projet:Project  { title:'Graph Databases' })
+   MATCH (sally)-[r:PARTICIPATES] -> (projet) 
+   RETURN r.since
+15.
+   MATCH (sally:Employee)-[:PARTICIPATES]->(project)
+   WHERE sally.name="Sally"   AND project.town ="Paris"
+   RETURN project.title
+
+16.
+      MATCH (e)-[:PARTICIPATES]->(p)<-[:COORDINATES]-(c)
+      RETURN e.name, c.name
+
+17. 
+ MATCH(p: Person)
+ WHERE p.name='Jim' OR p.name='Sally'
+ RETURN p.name as oldest 
+ ORDER BY p.age DESC  LIMIT 1
+
+18.
+
+MATCH (sally:Person {name:"Sally"})-[:PARTICIPATES]->(project),
+MATCH (john:Person {name:"John"})
+WHERE NOT (john)-[:PARTICIPATES]->(project)
+RETURN DISTINCT project.title
+
+19.
+
+MATCH(n) RETURN COUNT(n)
+
+20.
+
+MATCH () --> () RETURN COUNT(*)
+MATCH () -[r] -() RETURN type(r), count(*) 
+21. 
+ MATCH (e:Employee)-[:PARTICIPATES]->(p)
+ RETURN e.name, count(p)
+ ORDER BY count(p) DESC  LIMIT 10
+
+ MATCH (n) -- ()  RETURN n, labels(n), count(*)
+ 
+
+22. 
+MATCH (fof)-[:WORKS_WITH*2]-(jim :Person)
+    WHERE jim.name = 'Jim' and NOT (jim)-[:WORKS_WITH]-(fof)
+    RETURN DISTINCT fof.name
+
+23.
+
+MATCH p=shortestPath( (jim)-[*1..10]-(john) ) 
+       WHERE jim.name="Jim" and john.name = "John"
+       RETURN length(p)
+
+24. MATCH p=shortestPath( (jim)-[*1..10]-(john) ) 
+       WHERE jim.name="Jim" and john.name = "John"
+       RETURN EXTRACT ( n in nodes(p) | n.name )
+
+25.
+
+    MATCH (jim: Person {name:'Jim'})
+    MATCH (john:Person {name:'John'}), 
+    p = allShortestPaths((jim)-[*1..10]-(john))
+    RETURN p
+
+26.
+
+MATCH (sally {name: 'Sally'})--(other)--(x)
+RETURN other, count(DISTINCT x)+1 AS nbfoaf
+
+
+MATCH (sally {name: 'Sally'})-->(other)-->(x)
+WITH other, count(DISYINCT x)+1 AS nbfoaf
+WHERE nbfoaf > 2 
+RETURN other, nbfoaf
+
+27. 
+
+MATCH (n) 
+where n.name is not null
+with n
+     ORDER BY n.name DESC LIMIT 4
+     RETURN collect(n.name)
+
+28. 
+MATCH (p {title: 'Graph Databases'})--(other)
+          WITH other, p
+          ORDER BY other.name DESC LIMIT 1
+          MATCH (other)--(neigh) WHERE neigh <> p 
+           RETURN distinct neigh.name
